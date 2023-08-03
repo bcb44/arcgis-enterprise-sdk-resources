@@ -74,7 +74,7 @@
 					<Version>1.0</Version>
 					<Author>AuthorName</Author>
 					<Company>CompanyName</Company>
-					<TARGETS>10.9</TARGETS> <!-- Required -->
+					<TARGETS>11.2</TARGETS> <!-- Required -->
 				</configProp>
 			</configuration>
 			<executions>
