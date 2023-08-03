@@ -62,8 +62,7 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 
 	private static final long serialVersionUID = 1L;
 	private ILog serverLog;
-	private IServerObjectHelper soHelper;
-	private OutputStore outputStore;
+	private IMapServer ms;
 	private String virtualOutputDir = "";
 
 	public JavaDownloadFileRESTSOE()throws Exception{
@@ -95,13 +94,11 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 		 * order to make any method calls on the Server Object and release the
 		 * reference after making the method calls.
 		 */
-		this.soHelper=soh;
 		this.serverLog=ServerUtilities.getServerLogger();
 
 		serverLog.addMessage(3, 200, "Beginning init in "
 				+ this.getClass().getName() + " SOE.");
 		IMapServer ms = (IMapServer) soh.getServerObject();
-		outputStore = ServerUtilities.getOutputStore(ms);
 		virtualOutputDir = "/rest/directories/arcgisoutput"; //TODO: outputStore.getVirtualOutputDir();
 		this.serverLog.addMessage(3,200,"Initialized "+this.getClass().getName()+" SOE.");
 	}
@@ -136,6 +133,7 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 		byte[] inputBytes = inputText.getBytes();
 		long fileSize = inputBytes.length;
 		InputStream fileStream = new ByteArrayInputStream(inputBytes);
+		OutputStore outputStore = ServerUtilities.getOutputStore(ms);
 		outputStore.write(fileName, fileStream, fileSize);
 
 		if (outputFormat.equals("json")) {
@@ -167,6 +165,7 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 							  java.util.Map<String, String> responseProperties) throws Exception {
 		responseProperties.put("Content-Type", "application/json");
 		String fileName = operationInput.getString("fileName");
+		OutputStore outputStore = ServerUtilities.getOutputStore(ms);
 		if (fileName == null || fileName.isEmpty() || !outputStore.exists(fileName)) {
 			return new JSONObject().put("error", "file not found.").toString().getBytes(StandardCharsets.UTF_8);
 		}
@@ -197,6 +196,7 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 	 */
 	private byte[] getSubresourcefiles(String capabilitiesList, String outputFormat, JSONObject requestPropertiesJSON,
 									   java.util.Map<String, String> responsePropertiesMap) throws Exception {
+		OutputStore outputStore = ServerUtilities.getOutputStore(ms);
 		responsePropertiesMap.put("Content-Type", "application/json");
 		List<String> files = outputStore.listFiles();
 		files = files.stream().filter(f -> f.endsWith(".txt")).collect(Collectors.toList());
