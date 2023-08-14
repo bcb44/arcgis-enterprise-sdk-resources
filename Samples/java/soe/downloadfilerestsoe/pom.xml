@@ -66,9 +66,9 @@
 			<groupId>com.esri.arcgis.enterprise.sdk</groupId>
 			<artifactId>sdk-plugin</artifactId>
 			<version>11.2.0</version>
-            <dependencies>
-                <!-- Include any additional plugin dependencies here if needed -->
-            </dependencies>
+      <dependencies>
+          <!-- Include any additional plugin dependencies here if needed -->
+      </dependencies>
 			<configuration>
 				<configProp>
 					<Version>1.0</Version>
