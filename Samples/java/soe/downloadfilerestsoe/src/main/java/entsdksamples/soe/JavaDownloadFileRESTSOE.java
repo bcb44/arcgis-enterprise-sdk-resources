@@ -242,8 +242,6 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 		}
 		responsePropertiesMap.put("Content-Type", "application/json");
 		List<String> files = outputStore.listFiles(subDir);
-		files = files.stream().filter(f -> f.endsWith(".txt")).collect(Collectors.toList());
-
 		JSONArray filesArr = new JSONArray();
 		for(String fileName: files) {
 			filesArr.put(fileName);
