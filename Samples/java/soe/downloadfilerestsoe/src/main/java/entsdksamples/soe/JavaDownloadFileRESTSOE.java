@@ -18,14 +18,21 @@ USA
 email: contracts@esri.com
 */
 
-import java.io.*;
-import java.net.UnknownHostException;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.esri.arcgis.interop.AutomationException;
 import com.esri.arcgis.interop.extn.ArcGISExtension;
@@ -45,9 +52,6 @@ import com.esri.arcgis.system.IServerEnvironment2Proxy;
 import com.esri.arcgis.system.OutputStore;
 import com.esri.arcgis.system.ServerUtilities;
 import com.esri.arcgis.system.UID;
-
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @ArcGISExtension
 @ServerObjectExtProperties(displayName = "Java Download File REST SOE",
