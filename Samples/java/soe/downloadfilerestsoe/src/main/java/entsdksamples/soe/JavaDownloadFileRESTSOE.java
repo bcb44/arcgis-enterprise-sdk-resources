@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +71,8 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 	private OutputStore outputStore;
 	private String virtualOutputDir;
 
+	private Exception ex;
+
 	public JavaDownloadFileRESTSOE()throws Exception{
 		super();
 	}
@@ -94,19 +97,29 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 	 * init() is called once, when the instance of the SOE is created.
 	 */
 	public void init(IServerObjectHelper soh) throws IOException, AutomationException{
-		/*
-		 * An SOE should retrieve a weak reference to the Server Object from the Server Object Helper in
-		 * order to make any method calls on the Server Object and release the
-		 * reference after making the method calls.
-		 */
-		this.serverLog=ServerUtilities.getServerLogger();
+		try {
+			/*
+			 * An SOE should retrieve a weak reference to the Server Object from the Server Object Helper in
+			 * order to make any method calls on the Server Object and release the
+			 * reference after making the method calls.
+			 */
+			this.serverLog=ServerUtilities.getServerLogger();
 
-		serverLog.addMessage(3, 200, "Beginning init in "
-				+ this.getClass().getName() + " SOE.");
-		ms = (IMapServer) soh.getServerObject();
-		outputStore = ServerUtilities.getOutputStore(ms);
-		virtualOutputDir = outputStore.getServiceVirtualOutputDir();
-		this.serverLog.addMessage(3,200,"Initialized "+this.getClass().getName()+" SOE.");
+			serverLog.addMessage(3, 200, "Beginning init in "
+					+ this.getClass().getName() + " SOE.");
+			ms = (IMapServer) soh.getServerObject();
+			outputStore = ServerUtilities.getOutputStore(soh.getServerObject());
+			virtualOutputDir = outputStore.getServiceVirtualOutputDir();
+			this.serverLog.addMessage(3,200,"Initialized "+this.getClass().getName()+" SOE.");
+		}
+		catch (Exception ex) {
+			this.ex = ex;
+			String message = "Error during init()";
+			try {
+				serverLog.addMessage(1, 200, message + "\n\n" + ex);
+			} catch (Exception ignore) {}
+			throw new RuntimeException(message, ex);
+		}
 	}
 
 	/**
@@ -131,7 +144,6 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 	private byte[] DownloadFile(JSONObject operationInput, String outputFormat, JSONObject requestPropertiesJSON,
 								java.util.Map<String, String> responseProperties) throws Exception {
 		try {
-			outputStore = ServerUtilities.getOutputStore(ms);
 			String fileName = operationInput.optString("fileName");
 			if (fileName == null || fileName.isEmpty()) {
 				String fileId = UUID.randomUUID().toString().substring(0, 7);
@@ -313,6 +325,9 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 							 String outputFormat,
 							 JSONObject requestProperties,
 							 Map<String, String> responseProperties) {
+		if (ex != null) {
+			return ex.toString().getBytes();
+		}
 		JSONObject jsonResult = new JSONObject();
 		try {
 			String fileName = operationInput.optString("fileName");
