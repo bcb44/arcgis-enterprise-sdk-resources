@@ -42,8 +42,7 @@
                             <sourceRoot>${project.build.directory}/generated-sources/</sourceRoot>
                             <wsdlOptions>
                                 <wsdlOption>
-                                    <wsdl>${project.parent.basedir}/SimpleSoapSoe/target/MySoapSoe.wsdl</wsdl>
-<!--                                    <wsdl>https://dev0009736.esri.com/arcgis/services/SampleWorldCities/MapServer/MySoapSoe?wsdl</wsdl>-->
+                                    <wsdl>https://dev0024946.esri.com/arcgis/services/SampleWorldCities/MapServer/SimpleSOAPSOE?wsdl</wsdl>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
