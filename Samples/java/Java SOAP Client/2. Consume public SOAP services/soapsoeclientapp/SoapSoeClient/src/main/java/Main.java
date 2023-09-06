@@ -18,13 +18,13 @@ public class Main {
         //     and then get a reference of IMySoapSoe as the following code:
 
         //This is determined by the SOAP SOE's package name
-        String namespaceUrl = "http://www.samples.esri.com";
+        String namespaceUrl = "http://www.samples.entsdk";
 
         //This is the service name.
         //Refer to the service WSDL.
-        String serviceName = "MySoapSoeService";
+        String serviceName = "SimpleSOAPSOEService";
 
-        String serviceEndpoint = "https://dev0009736.esri.com/arcgis/services/SampleWorldCities/MapServer/MySoapSoe";
+        String serviceEndpoint = "https://dev0024946.esri.com/arcgis/services/SampleWorldCities/MapServer/SimpleSOAPSOE";
 
         QName qname = new QName(namespaceUrl, serviceName);
         URL url = new URL(serviceEndpoint);
