@@ -1,4 +1,5 @@
-import com.esri.samples.IMySoapSoe;
+
+import entsdksamples.soe.IJavaSimpleSOAPSOE;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
@@ -18,20 +19,20 @@ public class Main {
         //     and then get a reference of IMySoapSoe as the following code:
 
         //This is determined by the SOAP SOE's package name
-        String namespaceUrl = "http://www.samples.entsdk";
+        String namespaceUrl = "http://www.soe.entsdksamples";
 
         //This is the service name.
         //Refer to the service WSDL.
-        String serviceName = "SimpleSOAPSOEService";
+        String serviceName = "JavaSimpleSOAPSOEService";
 
-        String serviceEndpoint = "https://dev0024946.esri.com/arcgis/services/SampleWorldCities/MapServer/SimpleSOAPSOE";
+        String serviceEndpoint = "https://dev0024946.esri.com/arcgis/services/SampleWorldCities/MapServer/JavaSimpleSOAPSOE";
 
         QName qname = new QName(namespaceUrl, serviceName);
         URL url = new URL(serviceEndpoint);
         Service service = Service.create(url, qname);
 
-        IMySoapSoe mySoapSoe = service.getPort(IMySoapSoe.class);
-        int layerCnt = mySoapSoe.getLayerCountByType("feature");
+        IJavaSimpleSOAPSOE soe = service.getPort(IJavaSimpleSOAPSOE.class);
+        int layerCnt = soe.getLayerCountByType("feature");
         System.out.println("Layer count is: " + layerCnt);
 
     }
