@@ -100,7 +100,7 @@
 					<Version>1.0</Version>
 					<Author>EnterpriseSDKTeam</Author>
 					<Company>Esri</Company>
-					<TARGETS>10.9</TARGETS> <!-- Required -->
+					<TARGETS>11.2</TARGETS> <!-- Required -->
 				</configProp>
 			</configuration>
 			<executions>
