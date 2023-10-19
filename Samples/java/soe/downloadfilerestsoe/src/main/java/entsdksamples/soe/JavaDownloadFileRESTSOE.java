@@ -18,29 +18,12 @@ USA
 email: contracts@esri.com
 */
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import com.esri.arcgis.carto.IMapServer;
 import com.esri.arcgis.interop.AutomationException;
 import com.esri.arcgis.interop.extn.ArcGISExtension;
+import com.esri.arcgis.interop.extn.ServerObjectExtProperties;
 import com.esri.arcgis.server.IServerObjectExtension;
 import com.esri.arcgis.server.IServerObjectHelper;
-import com.esri.arcgis.interop.extn.ServerObjectExtProperties;
-import com.esri.arcgis.carto.IMapServer;
 import com.esri.arcgis.server.json.JSONArray;
 import com.esri.arcgis.server.json.JSONException;
 import com.esri.arcgis.server.json.JSONObject;
@@ -53,6 +36,22 @@ import com.esri.arcgis.system.IServerEnvironment2Proxy;
 import com.esri.arcgis.system.OutputStore;
 import com.esri.arcgis.system.ServerUtilities;
 import com.esri.arcgis.system.UID;
+
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @ArcGISExtension
 @ServerObjectExtProperties(displayName = "Java Download File REST SOE",
@@ -375,7 +374,7 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 			// resource
 			byte[] response;
 			if (operationName.isEmpty()) {
-				if (resourceName.equalsIgnoreCase("") || resourceName.length() == 0) {
+				if (resourceName.isEmpty()) {
 					return getRootResource(outputFormat, requestPropertiesJSON, responsePropertiesMap);
 				} else if (resourceName.equals("Files")) {
 					JSONObject input = new JSONObject(operationInput);
@@ -398,7 +397,7 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 			String message = "Exception occurred while handling REST request for SOE " + this.getClass().getName() + ":"
 					+ e.getMessage();
 			this.serverLog.addMessage(1, 500, message);
-			return ServerUtilities.sendError(0, message, null).getBytes("utf-8");
+			return ServerUtilities.sendError(0, message, null).getBytes(StandardCharsets.UTF_8);
 		}
 	}
 
