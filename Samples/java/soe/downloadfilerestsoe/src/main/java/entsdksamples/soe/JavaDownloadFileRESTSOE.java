@@ -153,12 +153,13 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 				InputStream fileStream = new ByteArrayInputStream(inputBytes);
 				outputStore.write(fileName, fileStream, fileSize);
 			}
-			responseProperties.put("Content-Type", "application/octet-stream");
-			responseProperties.put("Content-Disposition", "attachment; filename=" + fileName);
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			outputStore.read(fileName, out);
+			responseProperties.put("Content-Type", "application/octet-stream");
+			responseProperties.put("Content-Disposition", "attachment; filename=" + fileName);
 			return out.toByteArray();
 		} catch (Exception ex) {
+			responseProperties.put("Content-Type", "application/json");
 			return new JSONObject().put("error", ex).toString().getBytes(StandardCharsets.UTF_8);
 		}
 	}
@@ -227,7 +228,6 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 		try {
 			outputStore.delete(fileName);
 			return new JSONObject().put("success", true).toString().getBytes(StandardCharsets.UTF_8);
-
 		}
 		catch(Exception e) {
 			return new JSONObject().put("error", e.getMessage()).toString().getBytes(StandardCharsets.UTF_8);
@@ -241,7 +241,7 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 		json.put("name", "root resource");
 		json.put("description",
 				"This SOE generates a text file on the Server and allows clients to download the file from the Server.\n It also provides REST endpoints to manage those files such as obtaining file names and deleting the files.");
-		return json.toString().getBytes("utf-8");
+		return json.toString().getBytes(StandardCharsets.UTF_8);
 	}
 
 	/**
@@ -314,7 +314,7 @@ public class JavaDownloadFileRESTSOE implements IServerObjectExtension, IRESTReq
 		{
 			return ServerUtilities
 					.sendError(0, "No sub-resource by name " + resourceName + " found.", new String[] { "" })
-					.getBytes("utf-8");
+					.getBytes(StandardCharsets.UTF_8);
 		}
 
 		return operationOutput;
